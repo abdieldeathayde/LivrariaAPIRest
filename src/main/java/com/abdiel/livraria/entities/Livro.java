@@ -1,9 +1,21 @@
 package com.abdiel.livraria.entities;
 
+import jakarta.persistence.*;
+
+@Entity
 public class Livro {
 
-    String nome, sobrenome, titulo, editora, isbn;
+
     int anoEdicao, quantidadePaginas;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    Long id;
+
+    @Column(nullable = false)
+    String nome;
+    String sobrenome, titulo, editora, isbn;
+
 
     public Livro(String nome, String sobrenome, String titulo, String editora, String isbn, int anoEdicao, int quantidadePaginas) {
         this.nome = nome;
@@ -15,6 +27,14 @@ public class Livro {
         this.quantidadePaginas = quantidadePaginas;
     }
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public String getNome(String nome) {
         return nome;
     }
@@ -22,6 +42,8 @@ public class Livro {
     public void setNome(String nome) {
         this.nome = nome;
     }
+
+
 
     public String getSobrenome(String sobrenome) {
         return sobrenome;
