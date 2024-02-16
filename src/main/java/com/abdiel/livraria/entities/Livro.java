@@ -1,4 +1,4 @@
-package com.abdiel.livraria.entitites;
+package com.abdiel.livraria.entities;
 
 public class Livro {
 
