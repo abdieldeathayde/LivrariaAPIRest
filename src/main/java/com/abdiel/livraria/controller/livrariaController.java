@@ -2,103 +2,119 @@ package com.abdiel.livraria.controller;
 
 import com.abdiel.livraria.entities.Livro;
 import com.abdiel.livraria.repository.LivrariaRepository;
-import com.abdiel.livraria.service.livrariaService;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.Scanner;
 
 
 @RestController
+@RequestMapping(value = "/books")
 public class livrariaController {
 
     @Autowired
-    private LivrariaRepository _livrariaRepository;
-
-    livrariaService lvService = new livrariaService();
+    public LivrariaRepository _livrariaRepository;
 
     Scanner sc = new Scanner(System.in);
-
 
     public void menu() {
         System.out.print("Escolha uma opção: ");
         String opcao = sc.next();
 
-        System.out.println();
 
-        System.out.print("Escolha um id: ");
-        Long id = sc.nextLong();
 
-        System.out.print("\nDigite seu nome: ");
-        String nome = sc.next();
+        //
+        //        List<Livro> book;
+        //        book = Arrays.asList(livro, livro2, livro3);
 
-        System.out.print("\nDigite seu sobrenome: ");
-        String sobrenome = sc.next();
+        //Livro livro = new Livro(nome, sobrenome, titulo, editora, isbn, anoEdicao, quantidadePaginas);
 
-        System.out.print("\nDigite o titulo: ");
-        String titulo = sc.next();
+        Livro livro =  new Livro ("Bruce", "Tulgan", "Não tenha medo de ser chefe", "Sextante", "978-85-431-0818-6", 2007, 190);
 
-        System.out.print("\nDigite o nome da editora: ");
-        String editora = sc.next();
-
-        System.out.print("\nDigite o isbn: ");
-        String isbn = sc.next();
-
-        System.out.print("\nDigite o ano de edição: ");
-        int anoEdicao = sc.nextInt();
-
-        System.out.print("\nDigite a quantidade de páginas: ");
-        int quantidadePaginas = sc.nextInt();
+        System.out.println(livro.getNome("Bruce"));
 
         switch (opcao) {
-            case "1" -> adicionarLivro(nome, sobrenome, titulo, editora, isbn, anoEdicao, quantidadePaginas);
-            case "2" -> Get();
+            case "1" -> getObjects();
+            case "2" -> listar();
             case "3" -> atualizarLivro();
-            case "4" -> Delete(id);
+            case "4" -> Delete();
+
+            default -> throw new IllegalStateException("Unexpected value: " + opcao);
         }
+//        System.out.println(livro);
     }
 
+
+    //String nome, @RequestParam String sobrenome, @RequestParam String titulo, @RequestParam String editora, @RequestParam String isbn, @RequestParam int anoEdicao, @RequestParam int quantidadePaginas
+
+
     @GetMapping
+    public List<Livro> getObjects() {
 
-    public @ResponseBody void adicionarLivro(@RequestParam String nome, @RequestParam String sobrenome, @RequestParam String titulo, @RequestParam String editora, @RequestParam String isbn, @RequestParam int anoEdicao, @RequestParam int quantidadePaginas) {
 
-        /*Livro l1 = new Livro ("Bruce", "Tulgan", "Não tenha medo de ser chefe", "Sextante", "978-85-431-0818-6", 2007, 190);
-        Livro l2 = new Livro ( "Tim", "Collins", "EMPRESAS FEITAS PARA VENCER", "Alta Books", "978-85-508-0524-5", 2001, 367);
-        Livro l3 = new Livro ("Ernest", "Cline", "JOGADOR N° 1", "Leya", "978-85-441-0697-6", 2018, 462);
 
-        l3.setQuantidadePaginas(461);
-
-        List<Livro> livros = Arrays.asList(l1, l2, l3);
-        return livros;*/
 
         Livro livro = new Livro("Bruce", "Tulgan", "Não tenha medo de ser chefe", "Sextante", "978-85-431-0818-6", 2007, 190);
         Livro livro2 = new Livro("Tim", "Collins", "EMPRESAS FEITAS PARA VENCER", "Alta Books", "978-85-508-0524-5", 2001, 367);
         Livro livro3 = new Livro("Ernest", "Cline", "JOGADOR N° 1", "Leya", "978-85-441-0697-6", 2018, 462);
+
+        List<Livro> livroList;
+        livroList = Arrays.asList(livro, livro2, livro3);
+        return livroList;
+
+    }
+
+
+    @ResponseBody
+    @RequestMapping("/books")
+    public void listar() {
+
+//        Livro livro = new Livro("Bruce", "Tulgan", "Não tenha medo de ser chefe", "Sextante", "978-85-431-0818-6", 2007, 190);
+//        Livro livro2 = new Livro("Tim", "Collins", "EMPRESAS FEITAS PARA VENCER", "Alta Books", "978-85-508-0524-5", 2001, 367);
+//        Livro livro3 = new Livro("Ernest", "Cline", "JOGADOR N° 1", "Leya", "978-85-441-0697-6", 2018, 462);
+
+        List<Livro> book;
+        book = _livrariaRepository.findAll();
+        System.out.println("Livro: " + book + " status: " + HttpStatus.OK);
+
+
+    }
+
+
+
+    @ResponseBody
+    @Transactional
+    @RequestMapping(path = "/books", method = RequestMethod.PUT)
+    public void atualizarLivro(@RequestBody Livro livro) {
         _livrariaRepository.save(livro);
     }
 
-    @RequestMapping(value = "/books", method = RequestMethod.GET)
-    public List<Livro> Get() {
-        return _livrariaRepository.findAll();
-    }
 
+    @ResponseBody
+    @Transactional
+    @RequestMapping(path = "/livros/{id}", method = RequestMethod.DELETE)
+    public void Delete() {
+        System.out.print("\nDigite o id: ");
+        Long id = sc.nextLong();
 
-
-    public void atualizarLivro() {}
-
-    @RequestMapping(value = "/books/{id}", method = RequestMethod.DELETE)
-    public ResponseEntity<Object> Delete(@PathVariable(value = "id") Long id) {
-        Optional<Livro> livro = _livrariaRepository.findById(id);
-        if (livro.isPresent()) {
-            _livrariaRepository.delete(livro.get());
-            return new ResponseEntity<>(HttpStatus.OK);
+        Optional<Livro> livroExistente = _livrariaRepository.findById(id);
+        if (livroExistente.isPresent()) {
+            _livrariaRepository.delete(livroExistente.get());
+            new ResponseEntity<>(HttpStatus.OK);
         }
         else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+
     }
+
+//    public void set_livrariaRepository(LivrariaRepository _livrariaRepository) {
+//        this._livrariaRepository = _livrariaRepository;
+//    }
 }

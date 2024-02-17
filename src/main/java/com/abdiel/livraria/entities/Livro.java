@@ -3,6 +3,9 @@ package com.abdiel.livraria.entities;
 import jakarta.persistence.*;
 
 @Entity
+//@NoArgsConstructor
+//@AllArgsConstructor
+
 public class Livro {
 
 
@@ -94,4 +97,8 @@ public class Livro {
     }
 
 
+    @Override
+    public String toString() {
+        return super.toString();
+    }
 }
