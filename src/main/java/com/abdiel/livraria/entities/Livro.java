@@ -2,6 +2,8 @@ package com.abdiel.livraria.entities;
 
 import jakarta.persistence.*;
 
+import java.util.Objects;
+
 @Entity
 //@NoArgsConstructor
 //@AllArgsConstructor
@@ -98,7 +100,30 @@ public class Livro {
 
 
     @Override
-    public String toString() {
-        return super.toString();
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Livro livro)) return false;
+        return anoEdicao == livro.anoEdicao && quantidadePaginas == livro.quantidadePaginas && Objects.equals(getId(), livro.getId()) && Objects.equals(nome, livro.nome) && Objects.equals(sobrenome, livro.sobrenome) && Objects.equals(titulo, livro.titulo) && Objects.equals(editora, livro.editora) && Objects.equals(isbn, livro.isbn);
     }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(anoEdicao, quantidadePaginas, getId(), nome, sobrenome, titulo, editora, isbn);
+    }
+
+    @Override
+    public String toString() {
+        return "Livro{" +
+                "anoEdicao=" + anoEdicao +
+                ", quantidadePaginas=" + quantidadePaginas +
+                ", id=" + id +
+                ", nome='" + nome + '\'' +
+                ", sobrenome='" + sobrenome + '\'' +
+                ", titulo='" + titulo + '\'' +
+                ", editora='" + editora + '\'' +
+                ", isbn='" + isbn + '\'' +
+                '}';
+    }
+
+
 }

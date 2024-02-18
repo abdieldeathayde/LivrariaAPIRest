@@ -8,10 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-import java.util.Scanner;
+import java.util.*;
 
 
 @RestController
@@ -19,7 +16,11 @@ import java.util.Scanner;
 public class livrariaController {
 
     @Autowired
-    public LivrariaRepository _livrariaRepository;
+    private final LivrariaRepository _livrariaRepository;
+
+    public livrariaController(LivrariaRepository _livrariaRepository) {
+        this._livrariaRepository = _livrariaRepository;
+    }
 
     Scanner sc = new Scanner(System.in);
 
@@ -64,9 +65,14 @@ public class livrariaController {
         Livro livro2 = new Livro("Tim", "Collins", "EMPRESAS FEITAS PARA VENCER", "Alta Books", "978-85-508-0524-5", 2001, 367);
         Livro livro3 = new Livro("Ernest", "Cline", "JOGADOR N° 1", "Leya", "978-85-441-0697-6", 2018, 462);
 
-        List<Livro> livroList;
-        livroList = Arrays.asList(livro, livro2, livro3);
-        return livroList;
+//        List<Livro> livroList;
+//        livroList = Arrays.asList(livro, livro2, livro3);
+//        return livroList;
+
+        List<Livro> s;
+        s = _livrariaRepository.saveAll(livro, livro2, livro3);
+        return s;
+
 
     }
 
@@ -114,7 +120,5 @@ public class livrariaController {
 
     }
 
-//    public void set_livrariaRepository(LivrariaRepository _livrariaRepository) {
-//        this._livrariaRepository = _livrariaRepository;
-//    }
+
 }
