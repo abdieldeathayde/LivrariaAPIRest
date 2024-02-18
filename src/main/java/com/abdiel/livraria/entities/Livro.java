@@ -19,10 +19,11 @@ public class Livro {
 
     @Column(nullable = false)
     String nome;
-    String sobrenome, titulo, editora, isbn;
+    String sobrenome, titulo, editora;
+    Long isbn;
 
 
-    public Livro(String nome, String sobrenome, String titulo, String editora, String isbn, int anoEdicao, int quantidadePaginas) {
+    public Livro(String nome, String sobrenome, String titulo, String editora, Long isbn, int anoEdicao, int quantidadePaginas) {
         this.nome = nome;
         this.sobrenome = sobrenome;
         this.titulo = titulo;
@@ -74,11 +75,11 @@ public class Livro {
         this.editora = editora;
     }
 
-    public String getIsbn(String isbn) {
+    public Long getIsbn(Long isbn) {
         return isbn;
     }
 
-    public void setIsbn(String isbn) {
+    public void setIsbn(Long isbn) {
         this.isbn = isbn;
     }
 
