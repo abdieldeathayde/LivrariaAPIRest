@@ -1,4 +1,4 @@
 package com.abdiel.livraria.service;
 
-public class livrariaService {
+public class LivroService {
 }

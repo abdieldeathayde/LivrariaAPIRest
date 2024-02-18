@@ -1,11 +1,13 @@
 package com.abdiel.livraria.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
-public class LivrariaModel {
+import java.io.Serializable;
+
+@Entity
+@Table(name = "TB_LIVRO_MODEL")
+
+public class LivroModel implements Serializable {
     int anoEdicao, quantidadePaginas;
 
     @Id

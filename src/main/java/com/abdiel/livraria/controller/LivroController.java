@@ -1,7 +1,7 @@
 package com.abdiel.livraria.controller;
 
 import com.abdiel.livraria.entities.Livro;
-import com.abdiel.livraria.repository.LivrariaRepository;
+import com.abdiel.livraria.repository.LivroRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -11,24 +11,20 @@ import java.util.*;
 
 @RestController
 @RequestMapping(value = "/books")
-public class livrariaController {
+public class LivroController {
 
     @Autowired
-    private final LivrariaRepository _livrariaRepository;
+    private final LivroRepository _livroRepository;
 
-    public livrariaController(LivrariaRepository _livrariaRepository) {
-        this._livrariaRepository = _livrariaRepository;
+    public LivroController(LivroRepository _livroRepository) {
+        this._livroRepository = _livroRepository;
     }
-
-    Scanner sc = new Scanner(System.in);
-
-    //String nome, @RequestParam String sobrenome, @RequestParam String titulo, @RequestParam String editora, @RequestParam String isbn, @RequestParam int anoEdicao, @RequestParam int quantidadePaginas
 
 
     @GetMapping
     public void getObjects(@RequestBody Livro livro) {
 
-        _livrariaRepository.save(livro);
+        _livroRepository.save(livro);
 
     }
 
@@ -38,7 +34,7 @@ public class livrariaController {
     public List<Livro> listar() {
 
         List<Livro> book;
-        book = _livrariaRepository.findAll();
+        book = _livroRepository.findAll();
         return book;
 
 
@@ -50,7 +46,7 @@ public class livrariaController {
     @Transactional
     @RequestMapping(path = "/books", method = RequestMethod.PUT)
     public void atualizarLivro(@RequestBody Livro livro) {
-        _livrariaRepository.save(livro);
+        _livroRepository.save(livro);
     }
 
 
@@ -59,7 +55,7 @@ public class livrariaController {
     @RequestMapping(path = "/livros/{id}", method = RequestMethod.DELETE)
     public void Delete(@PathVariable Long isbn) {
 
-        _livrariaRepository.deleteById(isbn);
+        _livroRepository.deleteById(isbn);
 
     }
 
