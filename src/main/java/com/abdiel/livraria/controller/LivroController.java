@@ -1,63 +1,62 @@
 package com.abdiel.livraria.controller;
 
-import com.abdiel.livraria.entities.Livro;
-import com.abdiel.livraria.repository.LivroRepository;
-import jakarta.transaction.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
+
+import com.abdiel.livraria.model.Livro;
+import com.abdiel.livraria.service.LivroService;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.*;
+import java.util.List;
+import java.util.Optional;
 
 
 @RestController
-@RequestMapping(value = "/books")
+@RequestMapping(value = "/livros")
 public class LivroController {
 
-    @Autowired
-    private final LivroRepository _livroRepository;
+    private final LivroService livroService;
 
-    public LivroController(LivroRepository _livroRepository) {
-        this._livroRepository = _livroRepository;
+    public LivroController(LivroService livroService) {
+        this.livroService = livroService;
     }
-
-
-    @GetMapping
-    public void getObjects(@RequestBody Livro livro) {
-
-        _livroRepository.save(livro);
-
-    }
-
 
     @ResponseBody
-    @RequestMapping("/books")
-    public List<Livro> listar() {
-
-        List<Livro> book;
-        book = _livroRepository.findAll();
-        return book;
-
-
+    @RequestMapping(path = "/listarTodos", method = RequestMethod.GET)
+    public List<Livro> listarLivros() {
+        List<Livro> response = null;
+        response = livroService.listarTodos();
+        return response;
     }
 
-
-
+    @RequestMapping(path = "/atualizar", method = RequestMethod.PUT)
     @ResponseBody
-    @Transactional
-    @RequestMapping(path = "/books", method = RequestMethod.PUT)
     public void atualizarLivro(@RequestBody Livro livro) {
-        _livroRepository.save(livro);
+        livroService.salvar(livro);
     }
 
-
+    @RequestMapping(path = "/{id}", method = RequestMethod.DELETE)
     @ResponseBody
-    @Transactional
-    @RequestMapping(path = "/livros/{id}", method = RequestMethod.DELETE)
-    public void Delete(@PathVariable Long isbn) {
-
-        _livroRepository.deleteById(isbn);
-
+    public void delete(@PathVariable Long id) {
+        livroService.deletePeloId(id);
     }
 
+    @RequestMapping(path = "/{id}", method = RequestMethod.GET)
+    @ResponseBody
+    public Livro getLivroPorId(@PathVariable Long id) {
+        Optional<Livro> livroResponse = livroService.buscarPeloId(id);
 
+        if(livroResponse.isPresent())
+            return livroResponse.get();
+
+        return null;
+    }
+    @RequestMapping(path = "/isbn/{isbn}", method = RequestMethod.GET)
+    @ResponseBody
+    public Livro getLivroPorIsbn(@PathVariable Long isbn) {
+        Optional<Livro> livroResponse = livroService.buscarPeloIsbn(isbn);
+
+        if (livroResponse.isPresent())
+            return livroResponse.get();
+
+        return null;
+    }
 }
